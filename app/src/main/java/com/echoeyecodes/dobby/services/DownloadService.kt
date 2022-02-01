@@ -43,7 +43,7 @@ class DownloadService : Service(), DownloadManagerCallback {
     private fun showNotification(intent: PendingIntent): Notification {
         val builder = NotificationCompat.Builder(this, NOTIFICATION_CHANNEL_ID)
             .setContentTitle("Downloading files")
-            .setSmallIcon(R.drawable.ic_instagram)
+            .setSmallIcon(R.drawable.ic_logo)
             .setPriority(NotificationCompat.PRIORITY_HIGH)
             .setContentIntent(intent)
             .setContentText("Your files are getting downloaded")

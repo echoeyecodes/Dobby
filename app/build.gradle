@@ -17,7 +17,7 @@ android {
         applicationId "com.echoeyecodes.dobby"
         minSdk 21
         targetSdk 31
-        versionCode 1
+        versionCode 3248768
         versionName "2.0"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
@@ -25,7 +25,8 @@ android {
 
     buildTypes {
         release {
-            minifyEnabled false
+            minifyEnabled true
+            shrinkResources true
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
