@@ -159,7 +159,6 @@ class DownloadManager(private val context: Context) {
         return Pair(pathFile.absolutePath.toUri(), outputStream)
     }
 
-    @RequiresApi(Build.VERSION_CODES.Q)
     fun addTask(id: String, url: String) {
         val key = id
         if (taskCache[key] == null) {

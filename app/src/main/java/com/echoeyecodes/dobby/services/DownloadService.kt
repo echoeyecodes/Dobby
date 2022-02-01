@@ -62,7 +62,6 @@ class DownloadService : Service(), DownloadManagerCallback {
         downloadManager.addDownloadManagerCallback(this)
     }
 
-    @RequiresApi(Build.VERSION_CODES.Q)
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
         CoroutineScope(Dispatchers.IO).launch {
             val downloads = fileRepository.getActiveDownloads()
