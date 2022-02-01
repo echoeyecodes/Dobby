@@ -1,0 +1,221 @@
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <!-- Base application theme. -->
+    <style name="Theme.BookTweet" parent="Theme.MaterialComponents.DayNight.NoActionBar">
+        <!-- Primary brand color. -->
+        <!-- Primary brand color. -->
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryVariant">@color/colorPrimary</item>
+        <item name="colorOnPrimary">@color/white</item>
+        <!-- Secondary brand color. -->
+        <item name="colorSecondary">@color/colorPrimary</item>
+        <item name="colorSecondaryVariant">@color/colorPrimary</item>
+        <item name="android:windowLightStatusBar">true</item>
+        <item name="colorOnSecondary">@color/black</item>
+        <!-- Status bar color. -->
+        <item name="imageButtonStyle">@style/ImageButtonStyle</item>
+        <item name="bottomSheetDialogTheme">@style/BottomSheetDialogStyle</item>
+        <!-- Customize your theme here. -->
+        <item name="android:statusBarColor">@android:color/transparent</item>
+        <item name="android:navigationBarColor">@android:color/transparent</item>
+        <item name="snackbarStyle">@style/CustomSnackBarStyle</item>
+        <item name="snackbarButtonStyle">@style/CustomSnackBarButtonStyle</item>
+    </style>
+
+
+    <style name="CustomSnackBarStyle" parent="Widget.MaterialComponents.Snackbar">
+
+        <!--this child makes changes to the background color of the snackbar-->
+        <item name="materialThemeOverlay">@style/ThemeOverlay.App.Snackbar</item>
+
+        <!--if this is made 0 then the action button text color will be white-->
+        <!--if this is 1 then the custom color can be set to action button text-->
+        <item name="actionTextColorAlpha">1</item>
+    </style>
+
+    <!--this is child is needed only when there is action button in snackbar-->
+    <!--otherwise this is not necessary-->
+    <!--in this case the action button color inside the snackbar is set to red-->
+    <style name="CustomSnackBarButtonStyle" parent="Widget.MaterialComponents.Button.TextButton.Snackbar">
+        <item name="android:textColor">@android:color/white</item>
+    </style>
+
+    <!--this color inside this child is the background color of the snackbar-->
+    <style name="ThemeOverlay.App.Snackbar" parent="">
+        <item name="colorOnSurface">@color/colorPrimary</item>
+    </style>
+
+
+    <style name="ImageButtonStyle" parent="Widget.AppCompat.ImageButton">
+        <item name="android:tint">@color/neo_black</item>
+    </style>
+
+    <style name="BottomSheetDialogStyle" parent="Theme.MaterialComponents.Light.BottomSheetDialog">
+        <item name="bottomSheetStyle">@style/BottomSheetDialog</item>
+    </style>
+
+    <style name="BorderedButton" parent="Widget.MaterialComponents.Button.OutlinedButton">
+        <item name="android:textColor">@color/colorPrimary</item>
+        <item name="cornerRadius">5dp</item>
+        <item name="strokeWidth">1dp</item>
+        <item name="android:paddingTop">15dp</item>
+        <item name="android:paddingBottom">15dp</item>
+        <item name="strokeColor">@color/colorPrimary</item>
+        <item name="background">@android:color/transparent</item>
+        <item name="rippleColor">@color/grey</item>
+        <item name="android:elevation">0dp</item>
+    </style>
+
+    <style name="InputBottomSheetDialogStyle" parent="BottomSheetDialogStyle">
+        <item name="android:windowIsFloating">false</item>
+        <item name="android:statusBarColor">@android:color/transparent</item>
+        <item name="android:windowSoftInputMode">adjustResize</item>
+    </style>
+
+    <style name="BottomSheetDialog" parent="Widget.MaterialComponents.BottomSheet.Modal">
+        <item name="shapeAppearanceOverlay">@style/BottomSheetShapeAppearance</item>
+        <item name="backgroundTint">@android:color/transparent</item>
+    </style>
+
+    <style name="CustomBottomSheet" parent="">
+        <item name="android:background">@drawable/drawable_bottom_sheet</item>
+    </style>
+
+    <style name="BottomSheetShapeAppearance" parent="">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSizeTopLeft">10dp</item>
+        <item name="cornerSizeTopRight">10dp</item>
+        <item name="cornerSizeBottomLeft">0dp</item>
+        <item name="cornerSizeBottomRight">0dp</item>
+    </style>
+
+
+    <style name="BottomNavigationStyle" parent="Widget.Design.BottomNavigationView">
+        <item name="itemIconTint">@color/bottom_navigation_view_selected_state</item>
+        <item name="itemTextColor">@color/bottom_navigation_view_selected_state</item>
+        <item name="backgroundTint">@color/white</item>
+    </style>
+
+
+    <style name="Bold" parent="Widget.MaterialComponents.TextView">
+        <item name="android:fontFamily">@font/open_sans_bold</item>
+        <item name="android:textSize">20sp</item>
+        <item name="drawableTint">@color/neo_black</item>
+        <item name="android:textColor">@color/neo_black</item>
+    </style>
+
+    <style name="Light" parent="Widget.MaterialComponents.TextView">
+        <item name="android:fontFamily">@font/open_sans_light</item>
+        <item name="android:textSize">14sp</item>
+        <item name="drawableTint">@color/neo_black</item>
+        <item name="android:textColor">@color/neo_black</item>
+    </style>
+
+    <style name="Regular" parent="Widget.MaterialComponents.TextView">
+        <item name="android:fontFamily">@font/open_sans_regular</item>
+        <item name="android:textSize">14sp</item>
+        <item name="drawableTint">@color/neo_black</item>
+        <item name="android:textColor">@color/neo_black</item>
+    </style>
+
+
+    <style name="SemiBold" parent="Widget.MaterialComponents.TextView">
+        <item name="android:fontFamily">@font/fira_sans_medium</item>
+        <item name="android:textSize">18sp</item>
+        <item name="drawableTint">@color/neo_black</item>
+        <item name="android:textColor">@color/neo_black</item>
+    </style>
+
+    <style name="Medium" parent="Widget.MaterialComponents.TextView">
+        <item name="android:fontFamily">@font/open_sans_semibold</item>
+        <item name="android:textSize">18sp</item>
+        <item name="drawableTint">@color/neo_black</item>
+        <item name="android:textColor">@color/neo_black</item>
+    </style>
+
+    <style name="RoundButton" parent="Widget.MaterialComponents.Button">
+        <item name="elevation">0dp</item>
+        <item name="cornerRadius">24dp</item>
+        <item name="android:paddingTop">10dp</item>
+        <item name="android:paddingBottom">10dp</item>
+        <item name="android:paddingLeft">15dp</item>
+        <item name="android:paddingRight">15dp</item>
+    </style>
+
+
+    <style name="MovableIndicatorStyle">
+        <item name="android:backgroundTint">@color/black</item>
+    </style>
+
+    <style name="ReplyHeaderStyle">
+        <item name="cardBackgroundColor">@color/reply_background_light</item>
+    </style>
+
+    <style name="RegularEditText" parent="Widget.AppCompat.EditText">
+        <item name="android:background">@null</item>
+        <item name="android:textColorHint">@color/grey</item>
+        <item name="android:textColor">@color/black</item>
+        <item name="hintTextAppearance">@style/Regular</item>
+        <item name="android:textAppearance">@style/Regular</item>
+    </style>
+
+    <style name="AlertDialogStyle" parent="">
+        <item name="android:background">@drawable/drawable_alert_dialog_inset_light</item>
+        <item name="android:insetLeft">20dp</item>
+        <item name="android:insetRight">20dp</item>
+    </style>
+
+    <style name="CustomAlertDialog" parent="Theme.MaterialComponents.Dialog">
+        <item name="android:windowBackground">@android:color/transparent</item>
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryVariant">@color/colorPrimary</item>
+        <item name="colorOnPrimary">@color/white</item>
+        <item name="colorAccent">@color/colorPrimary</item>
+        <item name="colorControlActivated">@color/colorPrimary</item>
+        <!-- Secondary brand color. -->
+        <item name="colorSecondary">@color/colorPrimary</item>
+        <item name="colorSecondaryVariant">@color/colorPrimary</item>
+        <item name="colorOnSecondary">@color/black</item>
+    </style>
+
+    <style name="LoadingStyle" parent="">
+        <item name="android:background">@color/white</item>
+    </style>
+
+    <style name="SearchEditTextStyle" parent="RegularEditText">
+        <item name="android:textSize">14sp</item>
+        <item name="android:paddingStart">5dp</item>
+        <item name="android:imeOptions">actionSearch</item>
+        <item name="android:inputType">text</item>
+    </style>
+
+    <style name="MomentTextInputLayout" parent="Widget.MaterialComponents.TextInputLayout.OutlinedBox">
+        <item name="android:layout_marginTop">10dp</item>
+        <item name="android:layout_marginBottom">10dp</item>
+        <item name="android:gravity">top|start</item>
+    </style>
+
+    <style name="Divider" parent="">
+        <item name="android:background">@color/divider_light</item>
+    </style>
+
+    <style name="ViewStyle" parent="">
+        <item name="android:background">@color/white</item>
+    </style>
+
+    <style name="EventBottomSheetStyle" parent="">
+        <item name="cardBackgroundColor">@color/white</item>
+    </style>
+
+
+    <style name="SpotlightCollapsingToolbar" parent="Widget.Design.CollapsingToolbar">
+        <item name="contentScrim">@color/white</item>
+        <item name="statusBarScrim">@color/white</item>
+    </style>
+
+    <style name="SplashScreenTheme" parent = "Theme.MaterialComponents.DayNight.NoActionBar">
+        <item name="android:windowBackground">@drawable/drawable_splash</item>
+        <item name="android:navigationBarColor">@android:color/transparent</item>
+        <item name="android:statusBarColor">@android:color/transparent</item>
+    </style>
+
+</resources>

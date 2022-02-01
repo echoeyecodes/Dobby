@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">Dobby</string>
+    <string name="lorem">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque elementum velit ut velit suscipit tristique. Sed a porttitor ipsum. Ut vitae viverra lorem.</string>
+    <string name="notification_channel_title">Downloading Notification</string>
+    <string name="notification_channel_id">DOWNLOADING_DATA</string>
+    <string name="notification_channel_description">Notifies you of ongoing downloads in progress</string>
+</resources>

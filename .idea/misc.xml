@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="DesignSurface">
+    <option name="filePathToZoomLevelMap">
+      <map>
+        <entry key="..\:/Users/Logo/AndroidStudioProjects/BookTweet/app/src/main/res/layout/activity_welcome.xml" value="0.1" />
+        <entry key="..\:/Users/Logo/AndroidStudioProjects/Dobby/app/src/main/res/drawable/drawable_splash.xml" value="0.23692307692307693" />
+        <entry key="..\:/Users/Logo/AndroidStudioProjects/Dobby/app/src/main/res/drawable/ic_down_arrow.xml" value="0.12604166666666666" />
+        <entry key="..\:/Users/Logo/AndroidStudioProjects/Dobby/app/src/main/res/drawable/ic_empty.xml" value="0.12604166666666666" />
+        <entry key="..\:/Users/Logo/AndroidStudioProjects/Dobby/app/src/main/res/drawable/ic_taken.xml" value="0.12604166666666666" />
+        <entry key="..\:/Users/Logo/AndroidStudioProjects/Dobby/app/src/main/res/layout/activity_welcome.xml" value="0.12771739130434784" />
+        <entry key="..\:/Users/Logo/AndroidStudioProjects/Dobby/app/src/main/res/layout/fragment_add_url.xml" value="0.1" />
+        <entry key="..\:/Users/Logo/AndroidStudioProjects/Dobby/app/src/main/res/layout/fragment_download_action.xml" value="0.10989583333333333" />
+        <entry key="..\:/Users/Logo/AndroidStudioProjects/Dobby/app/src/main/res/layout/fragment_progress_dialog.xml" value="0.10916919959473151" />
+        <entry key="..\:/Users/Logo/AndroidStudioProjects/Dobby/app/src/main/res/layout/layout_download_action_item.xml" value="0.10989583333333333" />
+        <entry key="..\:/Users/Logo/AndroidStudioProjects/Dobby/app/src/main/res/layout/layout_empty.xml" value="0.10989583333333333" />
+        <entry key="..\:/Users/Logo/AndroidStudioProjects/Dobby/app/src/main/res/layout/layout_file_item.xml" value="0.2" />
+        <entry key="..\:/Users/Logo/AndroidStudioProjects/Dobby/app/src/main/res/layout/layout_main_toolbar.xml" value="0.12771739130434784" />
+        <entry key="..\:/Users/Logo/AndroidStudioProjects/Dobby/app/src/main/res/layout/layout_progress.xml" value="0.10989583333333333" />
+        <entry key="..\:/Users/Logo/AndroidStudioProjects/GrabThat/app/src/main/res/drawable-v24/drawable_alert_dialog_dark.xml" value="0.25" />
+        <entry key="..\:/Users/Logo/AndroidStudioProjects/GrabThat/app/src/main/res/drawable/drawable_alert_dialog_dark.xml" value="0.25" />
+        <entry key="..\:/Users/Logo/AndroidStudioProjects/GrabThat/app/src/main/res/drawable/drawable_option_btn.xml" value="0.23981481481481481" />
+        <entry key="..\:/Users/Logo/AndroidStudioProjects/GrabThat/app/src/main/res/drawable/drawable_option_text.xml" value="0.23981481481481481" />
+        <entry key="..\:/Users/Logo/AndroidStudioProjects/GrabThat/app/src/main/res/drawable/drawable_progress.xml" value="0.15989583333333332" />
+        <entry key="..\:/Users/Logo/AndroidStudioProjects/GrabThat/app/src/main/res/drawable/ic_baseline_check_circle_24.xml" value="0.23981481481481481" />
+        <entry key="..\:/Users/Logo/AndroidStudioProjects/GrabThat/app/src/main/res/layout/activity_faults.xml" value="0.17300724637681159" />
+        <entry key="..\:/Users/Logo/AndroidStudioProjects/GrabThat/app/src/main/res/layout/activity_main.xml" value="0.17300724637681159" />
+        <entry key="..\:/Users/Logo/AndroidStudioProjects/GrabThat/app/src/main/res/layout/activity_question.xml" value="0.16666666666666666" />
+        <entry key="..\:/Users/Logo/AndroidStudioProjects/GrabThat/app/src/main/res/layout/activity_welcome.xml" value="0.16666666666666666" />
+        <entry key="..\:/Users/Logo/AndroidStudioProjects/GrabThat/app/src/main/res/layout/fragment_confirm_choice.xml" value="0.16666666666666666" />
+        <entry key="..\:/Users/Logo/AndroidStudioProjects/GrabThat/app/src/main/res/layout/fragment_messaage_dialog.xml" value="0.1334853090172239" />
+        <entry key="..\:/Users/Logo/AndroidStudioProjects/GrabThat/app/src/main/res/layout/layout_divider.xml" value="0.17300724637681159" />
+        <entry key="..\:/Users/Logo/AndroidStudioProjects/GrabThat/app/src/main/res/layout/layout_fault_card.xml" value="0.264" />
+        <entry key="..\:/Users/Logo/AndroidStudioProjects/GrabThat/app/src/main/res/layout/layout_fault_category.xml" value="0.16666666666666666" />
+        <entry key="..\:/Users/Logo/AndroidStudioProjects/GrabThat/app/src/main/res/layout/layout_fault_item.xml" value="0.264" />
+        <entry key="..\:/Users/Logo/AndroidStudioProjects/GrabThat/app/src/main/res/layout/layout_option_btn.xml" value="0.17300724637681159" />
+        <entry key="..\:/Users/Logo/AndroidStudioProjects/GrabThat/app/src/main/res/layout/layout_question_card.xml" value="0.1" />
+      </map>
+    </option>
+  </component>
+  <component name="ProjectRootManager" version="2" languageLevel="JDK_11" default="true" project-jdk-name="Android Studio default JDK" project-jdk-type="JavaSDK">
+    <output url="file://$PROJECT_DIR$/build/classes" />
+  </component>
+  <component name="ProjectType">
+    <option name="id" value="Android" />
+  </component>
+</project>

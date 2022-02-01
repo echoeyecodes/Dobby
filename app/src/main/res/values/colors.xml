@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="purple_200">#FFBB86FC</color>
+    <color name="purple_500">#FF6200EE</color>
+    <color name="purple_700">#FF3700B3</color>
+    <color name="teal_200">#FF03DAC5</color>
+    <color name="teal_700">#FF018786</color>
+    <color name="black">#FF000000</color>
+    <color name="alt_black">#0D0D0D</color>
+    <color name="white">#FFFFFFFF</color>
+    <color name="empty_avatar_color">#e9f0ea</color>
+
+    <color name="shot_overlay">#33000000</color>
+
+    <color name="neo_black">#1b1e23</color>
+    <color name="shot_shadow_color">#BF000000</color>
+    <color name="dark_grey">#5c5c5c</color>
+    <color name="shot_action_background_color">#4D000000</color>
+
+    <color name="overlay">#80000000</color>
+
+    <color name="grey">#d2d2d2</color>
+    <color name="showMoreWhite">#E4E6EB</color>
+    <color name="showMoreDark">#393A3B</color>
+
+    <color name="divider_light">#e9e9e9</color>
+    <color name="divider_dark">#6c6a6a</color>
+
+    <color name="date_field_background">#e9e9e9</color>
+    <color name="reply_background_light">#f2f3f4</color>
+    <color name="divider_color">#4D000000</color>
+
+    <color name="inputStroke">#e9e9e9</color>
+    <color name="sunshine_yellow">#e4bc3f</color>
+    <color name="colorPrimary">#de5246</color>
+    <color name="facebookBlue">#4267B2</color>
+    <color name="google_blue">#4285F4</color>
+    <color name="google_green">#0F9D58</color>
+    <color name="ash">#e4e4e4</color>
+    <color name="colorPrimaryLight">#80de5246</color>
+    <color name="red">#ff0000</color>
+    <color name="bluish_white">#f0f8fe</color>
+
+    <color name="twitter_color">#1DA1F2</color>
+    <color name="google_color">#DB4437</color>
+
+    <color name="notification_unread_color">#0dde5246</color>
+</resources>

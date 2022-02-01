@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    android:id="@+id/progress_container"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
+    tools:showIn="@layout/layout_file_item"
+    android:layout_gravity="bottom"
+    >
+
+   <TextView
+       android:id="@+id/download_status"
+       android:layout_width="wrap_content"
+       android:layout_height="wrap_content"
+      android:text="Downloading"
+      style="@style/Regular"
+      android:textSize="12sp"
+      android:textColor="@color/grey"
+       android:layout_marginBottom="2dp"
+       />
+
+   <androidx.cardview.widget.CardView
+       android:id="@+id/indicator_container"
+       android:layout_width="match_parent"
+       android:layout_height="5dp"
+       app:cardBackgroundColor="@color/neo_black"
+       app:cardElevation="0dp"
+       app:contentPadding="0dp"
+       android:clipChildren="true"
+       app:cardCornerRadius="5dp"
+       >
+
+   <ProgressBar
+       android:id="@+id/progress"
+       android:layout_width="match_parent"
+       android:layout_height="match_parent"
+       android:max="100"
+       android:progress="0"
+       style="?android:attr/progressBarStyleHorizontal"
+       />
+
+</androidx.cardview.widget.CardView>
+</LinearLayout>

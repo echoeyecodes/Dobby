@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "254769990313",
+    "project_id": "dobby-ae8d1",
+    "storage_bucket": "dobby-ae8d1.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:254769990313:android:5d5f9f7bce0f6127a537b8",
+        "android_client_info": {
+          "package_name": "com.echoeyecodes.dobby"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "254769990313-v37s7eo4mpn1fg783pimp27haobfdd58.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.echoeyecodes.dobby",
+            "certificate_hash": "302f0635dd383c477b98f9fe8c6e3e0599bb4356"
+          }
+        },
+        {
+          "client_id": "254769990313-n8kaip18tnvef4c8bmanahikkjrl05bo.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBJ6xSGYU7NIP9LXEoAQsf5pP0wJtoYwfI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "254769990313-n8kaip18tnvef4c8bmanahikkjrl05bo.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
