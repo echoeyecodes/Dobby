@@ -12,7 +12,7 @@
 
     <color name="shot_overlay">#33000000</color>
 
-    <color name="neo_black">#1b1e23</color>
+    <color name="neo_black">#23272A</color>
     <color name="shot_shadow_color">#BF000000</color>
     <color name="dark_grey">#5c5c5c</color>
     <color name="shot_action_background_color">#4D000000</color>
@@ -45,4 +45,6 @@
     <color name="google_color">#DB4437</color>
 
     <color name="notification_unread_color">#0dde5246</color>
+    <color name="inputBoxColorLight">#F2F3F5</color>
+    <color name="inputBoxColorDark">#2C2F33</color>
 </resources>

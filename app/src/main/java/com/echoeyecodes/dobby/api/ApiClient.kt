@@ -1,6 +1,7 @@
 package com.echoeyecodes.dobby.api
 
 import android.content.Context
+import com.echoeyecodes.dobby.BuildConfig
 import com.google.gson.GsonBuilder
 import okhttp3.Interceptor
 import okhttp3.OkHttpClient
@@ -9,9 +10,8 @@ import retrofit2.converter.gson.GsonConverterFactory
 
 class ApiClient {
     private lateinit var retrofitBuilder: Retrofit.Builder
-    private val BASE_URL = "https://downloader.picashot.co/"
+    private val BASE_URL = "https://serene-art-334807.nw.r.appspot.com/"
     private lateinit var retrofit: Retrofit
-    private lateinit var context: Context
 
     init {
         init()
@@ -22,7 +22,6 @@ class ApiClient {
         private var INSTANCE: ApiClient? = null
         fun getInstance(context: Context) = INSTANCE ?: synchronized(this) {
             val instance = ApiClient().apply {
-                this.context = context
             }
             INSTANCE = instance
             return instance
@@ -34,8 +33,8 @@ class ApiClient {
         val httpclient = OkHttpClient.Builder()
         httpclient.addInterceptor { chain: Interceptor.Chain ->
             val originalRequest = chain.request()
-            val version: String = "0"
-            val versioncode: String = "0"
+            val version = BuildConfig.VERSION_NAME
+            val versioncode = BuildConfig.VERSION_CODE.toString()
             val request = originalRequest.newBuilder()
                 .header("Content-Type", "application/json")
                 .header("version", version).header("versioncode", versioncode).build()

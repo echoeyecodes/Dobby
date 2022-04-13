@@ -104,19 +104,19 @@ class MainActivity : AppCompatActivity(), EmptyAdapterCallback, FileItemAdapterC
         addBtn.setOnClickListener { openInputUrlDialog() }
         fab.setOnClickListener { openInputUrlDialog() }
 
-        viewModel.getFilesLiveData().observe(this, {
+        viewModel.getFilesLiveData().observe(this) {
             if (it.isEmpty()) {
                 emptyAdapter.submitList(listOf(emptyModel))
             } else {
                 emptyAdapter.submitList(ArrayList())
             }
             fileAdapter.submitList(it)
-        })
+        }
         startBackgroundService()
 
         handleShareToDownloadIntent(intent)
 
-        viewModel.getNetworkState().observe(this, {
+        viewModel.getNetworkState().observe(this) {
             if (it == NetworkState.LOADING) {
                 AndroidUtilities.showFragment(supportFragmentManager, progressDialogFragment)
             } else {
@@ -129,7 +129,7 @@ class MainActivity : AppCompatActivity(), EmptyAdapterCallback, FileItemAdapterC
             if (it == NetworkState.ERROR) {
                 AndroidUtilities.showSnackBar(recyclerView, "Failed to fetch data")
             }
-        })
+        }
 
     }
 

@@ -27,11 +27,6 @@ class DownloadManager(private val context: Context) {
     private val taskCache = HashMap<String, Job>()
     private val callbacks = ArrayList<DownloadManagerCallback>()
 
-    private val threadPoolExecutor = ThreadPoolExecutor(
-        MINIMUM_POOL_SIZE,
-        MAXIMUM_POOL_SIZE, 0, TimeUnit.MILLISECONDS, LinkedBlockingQueue<Runnable>()
-    )
-
     fun addDownloadManagerCallback(callback: DownloadManagerCallback) {
         this.callbacks.add(callback)
     }
@@ -48,7 +43,6 @@ class DownloadManager(private val context: Context) {
         const val MINIMUM_POOL_SIZE = 4
     }
 
-    @Suppress("BlockingMethodInNonBlockingContext")
     private suspend fun downloadFile(id: String, downloadUrl: String) {
         withContext(Dispatchers.IO) {
             var inputStream: BufferedInputStream? = null
@@ -179,6 +173,10 @@ class DownloadManager(private val context: Context) {
 
     private fun isExecutionComplete(): Boolean {
         return taskCache.size == 0
+    }
+
+    fun hasActiveDownloads():Boolean{
+        return taskCache.size > 0
     }
 
     private fun endDownload() {

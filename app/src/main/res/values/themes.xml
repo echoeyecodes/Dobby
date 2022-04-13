@@ -218,4 +218,18 @@
         <item name="android:statusBarColor">@android:color/transparent</item>
     </style>
 
+    <style name="TextInputLayoutStyle" parent="Widget.MaterialComponents.TextInputLayout.FilledBox">
+        <item name="boxStrokeWidth">0dp</item>
+        <item name="boxStrokeWidthFocused">0dp</item>
+        <item name="boxCornerRadiusBottomEnd">4dp</item>
+        <item name="boxCornerRadiusBottomStart">4dp</item>
+        <item name="boxCornerRadiusTopEnd">4dp</item>
+        <item name="boxCornerRadiusTopStart">4dp</item>
+        <item name="boxBackgroundColor">@color/inputBoxColorLight</item>
+    </style>
+
+    <style name="TextInputStyle" parent="ThemeOverlay.Material3.TextInputEditText">
+        <item name="android:textColor">@color/black</item>
+    </style>
+
 </resources>

@@ -4,9 +4,7 @@ import android.app.Notification
 import android.app.PendingIntent
 import android.app.Service
 import android.content.Intent
-import android.os.Build
 import android.os.IBinder
-import androidx.annotation.RequiresApi
 import androidx.core.app.NotificationCompat
 import com.echoeyecodes.dobby.R
 import com.echoeyecodes.dobby.activities.MainActivity
@@ -35,7 +33,7 @@ class DownloadService : Service(), DownloadManagerCallback {
     }
 
 
-    fun terminateService() {
+    private fun terminateService() {
         AndroidUtilities.log("service stoppped")
         stopSelf()
     }
@@ -48,6 +46,20 @@ class DownloadService : Service(), DownloadManagerCallback {
             .setContentIntent(intent)
             .setContentText("Your files are getting downloaded")
         return builder.build()
+    }
+
+    private fun startDownload(){
+        CoroutineScope(Dispatchers.IO).launch {
+            val downloads = fileRepository.getActiveDownloads()
+            val iterator = downloads.iterator()
+            while (iterator.hasNext()) {
+                val download = iterator.next()
+                downloadManager.addTask(download.id, download.uri)
+            }
+            if(!downloadManager.hasActiveDownloads()){
+                terminateService()
+            }
+        }
     }
 
     override fun onCreate() {
@@ -63,18 +75,7 @@ class DownloadService : Service(), DownloadManagerCallback {
     }
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
-        CoroutineScope(Dispatchers.IO).launch {
-            val downloads = fileRepository.getActiveDownloads()
-            if (downloads.isNotEmpty()) {
-                val iterator = downloads.iterator()
-                while (iterator.hasNext()) {
-                    val download = iterator.next()
-                    downloadManager.addTask(download.id, download.uri)
-                }
-            } else {
-                terminateService()
-            }
-        }
+        startDownload()
         return START_REDELIVER_INTENT
     }
 
