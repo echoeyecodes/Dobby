@@ -1,0 +1,20 @@
+{
+  "version": 3,
+  "artifactType": {
+    "type": "APK",
+    "kind": "Directory"
+  },
+  "applicationId": "com.echoeyecodes.dobby",
+  "variantName": "release",
+  "elements": [
+    {
+      "type": "SINGLE",
+      "filters": [],
+      "attributes": [],
+      "versionCode": 3248770,
+      "versionName": "2.1",
+      "outputFile": "app-release.apk"
+    }
+  ],
+  "elementType": "File"
+}

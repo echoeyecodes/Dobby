@@ -1,11 +1,13 @@
-package com.echoeyecodes.dobby.services
+package com.echoeyecodes.dobby.workmanager
 
 import android.app.Notification
 import android.app.PendingIntent
-import android.app.Service
+import android.content.Context
 import android.content.Intent
-import android.os.IBinder
 import androidx.core.app.NotificationCompat
+import androidx.work.CoroutineWorker
+import androidx.work.ForegroundInfo
+import androidx.work.WorkerParameters
 import com.echoeyecodes.dobby.R
 import com.echoeyecodes.dobby.activities.MainActivity
 import com.echoeyecodes.dobby.callbacks.downloadmanagercallbacks.DownloadManagerCallback
@@ -13,33 +15,21 @@ import com.echoeyecodes.dobby.repository.FileRepository
 import com.echoeyecodes.dobby.utils.AndroidUtilities
 import com.echoeyecodes.dobby.utils.DownloadManager
 import com.echoeyecodes.dobby.utils.DownloadStatus
-import kotlinx.coroutines.CancellationException
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.*
 
-class DownloadService : Service(), DownloadManagerCallback {
-    private lateinit var downloadManager: DownloadManager
-    private lateinit var fileRepository: FileRepository
-
+class DownloadWorkManager(context: Context, workerParams: WorkerParameters) :
+    CoroutineWorker(context, workerParams), DownloadManagerCallback {
+    private val downloadManager = DownloadManager.getInstance(context)
+    private val fileRepository = FileRepository(context)
+    private var shouldTerminate = false
 
     companion object {
         const val NOTIFICATION_ID = 4523156
         const val NOTIFICATION_CHANNEL_ID = "DOWNLOADING_DATA"
     }
 
-    override fun onBind(intent: Intent?): IBinder? {
-        return null
-    }
-
-
-    private fun terminateService() {
-        AndroidUtilities.log("service stoppped")
-        stopSelf()
-    }
-
     private fun showNotification(intent: PendingIntent): Notification {
-        val builder = NotificationCompat.Builder(this, NOTIFICATION_CHANNEL_ID)
+        val builder = NotificationCompat.Builder(applicationContext, NOTIFICATION_CHANNEL_ID)
             .setContentTitle("Downloading files")
             .setSmallIcon(R.drawable.ic_logo)
             .setPriority(NotificationCompat.PRIORITY_HIGH)
@@ -48,35 +38,41 @@ class DownloadService : Service(), DownloadManagerCallback {
         return builder.build()
     }
 
-    private fun startDownload(){
-        CoroutineScope(Dispatchers.IO).launch {
+    private suspend fun startDownload() {
+        withContext(Dispatchers.IO) {
             val downloads = fileRepository.getActiveDownloads()
             val iterator = downloads.iterator()
             while (iterator.hasNext()) {
                 val download = iterator.next()
                 downloadManager.addTask(download.id, download.uri)
             }
-            if(!downloadManager.hasActiveDownloads()){
+            if (!downloadManager.hasActiveDownloads()) {
                 terminateService()
             }
         }
     }
 
-    override fun onCreate() {
-        super.onCreate()
+    override suspend fun getForegroundInfo(): ForegroundInfo {
         val pendingIntent = Intent(applicationContext, MainActivity::class.java).let {
             PendingIntent.getActivity(applicationContext, 0, it, 0)
         }
-        startForeground(NOTIFICATION_ID, showNotification(pendingIntent))
-
-        fileRepository = FileRepository(applicationContext)
-        downloadManager = DownloadManager.getInstance(applicationContext)
-        downloadManager.addDownloadManagerCallback(this)
+        return ForegroundInfo(NOTIFICATION_ID, showNotification(pendingIntent))
     }
 
-    override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
-        startDownload()
-        return START_REDELIVER_INTENT
+    override suspend fun doWork(): Result {
+        return withContext(Dispatchers.IO) {
+            downloadManager.addDownloadManagerCallback(this@DownloadWorkManager)
+            while (!shouldTerminate) {
+                delay(3000)
+                startDownload()
+            }
+            Result.success()
+        }
+    }
+
+    private fun terminateService() {
+        AndroidUtilities.log("service stoppped")
+        shouldTerminate = true
     }
 
     override fun onDownloadStarted(id: String) {
@@ -105,11 +101,6 @@ class DownloadService : Service(), DownloadManagerCallback {
 
     override fun onDownloadsFinished() {
         terminateService()
-    }
-
-    override fun onDestroy() {
-        downloadManager.removeDownloadManagerCallback(this)
-        super.onDestroy()
     }
 
 }

@@ -26,8 +26,6 @@
                 android:resource="@xml/provider_path" />
         </provider>
 
-        <service android:name=".services.DownloadService" />
-
         <activity
             android:name="com.echoeyecodes.dobby.activities.SplashScreenActivity"
             android:configChanges="orientation|screenSize|screenLayout"

@@ -1,21 +1,16 @@
 package com.echoeyecodes.dobby.utils
 
 import android.content.Context
-import android.content.Intent
-import android.os.Build
-import com.echoeyecodes.dobby.services.DownloadService
+import androidx.work.*
+import com.echoeyecodes.dobby.workmanager.DownloadWorkManager
 
 class ServiceUtil {
 
     companion object {
         fun startDownloadService(context: Context) {
-            Intent(context, DownloadService::class.java).also {
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                    context.startForegroundService(it)
-                } else {
-                    context.startService(it)
-                }
-            }
+            val workRequest = OneTimeWorkRequestBuilder<DownloadWorkManager>()
+                .addTag("DOWNLOAD").setExpedited(OutOfQuotaPolicy.RUN_AS_NON_EXPEDITED_WORK_REQUEST).build()
+            WorkManager.getInstance(context).enqueueUniqueWork("DOWNLOAD", ExistingWorkPolicy.KEEP, workRequest)
         }
     }
 }

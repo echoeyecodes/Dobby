@@ -64,7 +64,7 @@ class AndroidUtilities {
         fun showToastMessage(context: Context, message: String) =
             Toast.makeText(context, message, Toast.LENGTH_SHORT).show()
 
-        fun log(message: String) = Log.d("CARRR", message)
+        fun log(message: Any?) = Log.d("CARRR", message.toString())
         fun openFile(context: Context, path: String) {
             try {
                 val type = FileUtils.getMimeType(context, path)

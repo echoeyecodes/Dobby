@@ -112,7 +112,6 @@ class FileRepository(private val context: Context) {
             val file = filesDao.getFile(id)
             file?.let {
                 filesDao.updateFileStatus(id, status.encode())
-                AndroidUtilities.log("Updated status for id $id to $status")
             }
         }
     }
@@ -122,7 +121,6 @@ class FileRepository(private val context: Context) {
             val file = filesDao.getFile(id)
             file?.let {
                 filesDao.updateFilePath(id, path)
-                AndroidUtilities.log("Updated path for id $id to $path")
             }
         }
     }

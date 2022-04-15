@@ -49,10 +49,18 @@ class MainActivity : AppCompatActivity(), EmptyAdapterCallback, FileItemAdapterC
     private lateinit var addUrlDialogFragment: AddUrlDialogFragment
     private lateinit var fileAdapter: FileItemAdapter
 
-    private val requiredPermissions = arrayOf(
-        Manifest.permission.READ_EXTERNAL_STORAGE,
-        Manifest.permission.WRITE_EXTERNAL_STORAGE
-    )
+    private val requiredPermissions = if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.P){
+        arrayOf(
+            Manifest.permission.READ_EXTERNAL_STORAGE,
+            Manifest.permission.WRITE_EXTERNAL_STORAGE,
+            Manifest.permission.FOREGROUND_SERVICE
+        )
+    }else{
+        arrayOf(
+            Manifest.permission.READ_EXTERNAL_STORAGE,
+            Manifest.permission.WRITE_EXTERNAL_STORAGE
+        )
+    }
 
     companion object {
         const val PERMISSIONS_REQUEST_CODE = 1
