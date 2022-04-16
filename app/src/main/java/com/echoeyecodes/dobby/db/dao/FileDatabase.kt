@@ -8,7 +8,7 @@ import androidx.room.TypeConverters
 import com.echoeyecodes.dobby.db.models.FileDBModel
 import com.echoeyecodes.dobby.utils.TypeConverter
 
-@Database(entities = [FileDBModel::class], version = 1)
+@Database(entities = [FileDBModel::class], version = 2)
 @TypeConverters(TypeConverter::class)
 abstract class FileDatabase : RoomDatabase() {
     abstract fun fileDao(): FileDao

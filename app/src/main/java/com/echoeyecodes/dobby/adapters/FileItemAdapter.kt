@@ -41,6 +41,7 @@ class FileItemAdapter(private val callback: FileItemAdapterCallback) :
         @SuppressLint("SetTextI18n")
         fun bind(model: FileDBModel) {
             title.text = model.name
+            val fileSize = FileUtils.getFileSize(view.context, model.path ?: "")
             Glide.with(view).load(model.getPath(view.context)).sizeMultiplier(0.5f).into(imageView)
 
             updateDownloadStatus(model)
@@ -48,7 +49,7 @@ class FileItemAdapter(private val callback: FileItemAdapterCallback) :
             size.text = "${model.size.getFormattedSize()} | ${model.timestamp.getFormattedDate()}"
 
             view.setOnClickListener { callback.onItemPressed(model) }
-            updateProgress(model.bytesDownloaded, model.size)
+            updateProgress(fileSize, model.size)
         }
 
         fun updateProgress(bytesDownloaded: Long, size: Long) {

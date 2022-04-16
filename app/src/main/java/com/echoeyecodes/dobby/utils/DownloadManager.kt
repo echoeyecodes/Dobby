@@ -38,9 +38,6 @@ class DownloadManager(private val context: Context) {
             instance = newInstance
             return newInstance
         }
-
-        const val MAXIMUM_POOL_SIZE = 4
-        const val MINIMUM_POOL_SIZE = 4
     }
 
     private suspend fun downloadFile(id: String, downloadUrl: String) {
@@ -66,6 +63,7 @@ class DownloadManager(private val context: Context) {
                     outputStream = fileStream.second
                     outputStream?.let {
                         val fileLength = max(connection.contentLength, 1)
+                        callbacks.forEach { it.onSizeDetermined(id, fileLength.toLong()) }
 
                         val data = ByteArray(1024)
                         var total = 0L
@@ -175,7 +173,7 @@ class DownloadManager(private val context: Context) {
         return taskCache.size == 0
     }
 
-    fun hasActiveDownloads():Boolean{
+    fun hasActiveDownloads(): Boolean {
         return taskCache.size > 0
     }
 

@@ -64,7 +64,6 @@ class FileRepository(private val context: Context) {
             this.url,
             this.originalUrl,
             DownloadStatus.WAITING,
-            0,
             null
         )
     }
@@ -98,11 +97,11 @@ class FileRepository(private val context: Context) {
         }
     }
 
-    fun updateFileProgress(id: String, bytes: Long, total: Long) {
+    fun updateFileSize(id: String, size: Long) {
         CoroutineScope(Dispatchers.IO).launch {
             val file = filesDao.getFile(id)
             file?.let {
-                filesDao.updateFileProgress(id, bytes, total)
+                filesDao.updateFileSize(id, size)
             }
         }
     }

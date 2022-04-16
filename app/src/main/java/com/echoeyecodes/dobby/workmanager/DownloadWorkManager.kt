@@ -10,15 +10,14 @@ import androidx.work.ForegroundInfo
 import androidx.work.WorkerParameters
 import com.echoeyecodes.dobby.R
 import com.echoeyecodes.dobby.activities.MainActivity
-import com.echoeyecodes.dobby.callbacks.downloadmanagercallbacks.DownloadManagerCallback
+import com.echoeyecodes.dobby.callbacks.downloadmanagercallbacks.DownloadManagerCallbackImpl
 import com.echoeyecodes.dobby.repository.FileRepository
-import com.echoeyecodes.dobby.utils.AndroidUtilities
 import com.echoeyecodes.dobby.utils.DownloadManager
 import com.echoeyecodes.dobby.utils.DownloadStatus
 import kotlinx.coroutines.*
 
 class DownloadWorkManager(context: Context, workerParams: WorkerParameters) :
-    CoroutineWorker(context, workerParams), DownloadManagerCallback {
+    CoroutineWorker(context, workerParams) {
     private val downloadManager = DownloadManager.getInstance(context)
     private val fileRepository = FileRepository(context)
     private var shouldTerminate = false
@@ -61,46 +60,54 @@ class DownloadWorkManager(context: Context, workerParams: WorkerParameters) :
 
     override suspend fun doWork(): Result {
         return withContext(Dispatchers.IO) {
-            downloadManager.addDownloadManagerCallback(this@DownloadWorkManager)
+            downloadManager.addDownloadManagerCallback(downloadManagerCallback)
             while (!shouldTerminate) {
                 delay(3000)
                 startDownload()
             }
+            downloadManager.removeDownloadManagerCallback(downloadManagerCallback)
             Result.success()
         }
     }
 
     private fun terminateService() {
-        AndroidUtilities.log("service stoppped")
         shouldTerminate = true
     }
 
-    override fun onDownloadStarted(id: String) {
-        fileRepository.updateFileStatus(id, DownloadStatus.DOWNLOADING)
-    }
-
-    override fun onPathDetermined(id: String, path: String) {
-        fileRepository.updateFilePath(id, path)
-    }
-
-    override fun onDownloadProgress(id: String, bytesRead: Long, total: Long) {
-        fileRepository.updateFileProgress(id, bytesRead, total)
-    }
-
-    override fun onDownloadComplete(id: String) {
-        fileRepository.updateFileStatus(id, DownloadStatus.COMPLETE)
-    }
-
-    override fun onDownloadCancelled(id: String, exception: Exception) {
-        if (exception is CancellationException) {
-            fileRepository.updateFileStatus(id, DownloadStatus.CANCELLED)
-        } else {
-            fileRepository.updateFileStatus(id, DownloadStatus.FAILED)
+    private val downloadManagerCallback = object : DownloadManagerCallbackImpl {
+        override fun onDownloadStarted(id: String) {
+            super.onDownloadStarted(id)
+            fileRepository.updateFileStatus(id, DownloadStatus.DOWNLOADING)
         }
-    }
 
-    override fun onDownloadsFinished() {
-        terminateService()
+        override fun onPathDetermined(id: String, path: String) {
+            super.onPathDetermined(id, path)
+            fileRepository.updateFilePath(id, path)
+        }
+
+        override fun onDownloadComplete(id: String) {
+            super.onDownloadComplete(id)
+            fileRepository.updateFileStatus(id, DownloadStatus.COMPLETE)
+        }
+
+        override fun onDownloadCancelled(id: String, exception: Exception) {
+            super.onDownloadCancelled(id, exception)
+            if (exception is CancellationException) {
+                fileRepository.updateFileStatus(id, DownloadStatus.CANCELLED)
+            } else {
+                fileRepository.updateFileStatus(id, DownloadStatus.FAILED)
+            }
+        }
+
+        override fun onSizeDetermined(id: String, size: Long) {
+            super.onSizeDetermined(id, size)
+            fileRepository.updateFileSize(id, size)
+        }
+
+        override fun onDownloadsFinished() {
+            super.onDownloadsFinished()
+            terminateService()
+        }
     }
 
 }

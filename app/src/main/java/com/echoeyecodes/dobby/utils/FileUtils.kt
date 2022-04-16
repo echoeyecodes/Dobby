@@ -3,6 +3,7 @@ package com.echoeyecodes.dobby.utils
 import android.content.Context
 import android.net.Uri
 import android.os.Build
+import android.provider.OpenableColumns
 import android.webkit.MimeTypeMap
 import androidx.documentfile.provider.DocumentFile
 import java.io.File
@@ -28,6 +29,19 @@ class FileUtils {
                 exists
             } else {
                 File(path).exists()
+            }
+        }
+
+        fun getFileSize(context: Context, path: String): Long {
+            return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                val fileExists = exists(context, path)
+                if (!fileExists) {
+                    0L
+                } else {
+                    context.contentResolver.openFileDescriptor(Uri.parse(path), "r")?.statSize ?: 0L
+                }
+            } else {
+                File(path).length()
             }
         }
     }

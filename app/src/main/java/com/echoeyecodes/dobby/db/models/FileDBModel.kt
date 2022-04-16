@@ -5,6 +5,7 @@ import android.net.Uri
 import android.os.Build
 import androidx.documentfile.provider.DocumentFile
 import androidx.room.Entity
+import androidx.room.Ignore
 import androidx.room.PrimaryKey
 import com.echoeyecodes.dobby.utils.DownloadStatus
 import com.echoeyecodes.dobby.utils.FileUtils
@@ -22,19 +23,15 @@ data class FileDBModel(
     val uri: String,
     val originalUrl: String,
     val status: DownloadStatus,
-    val bytesDownloaded: Long,
     val path: String?,
     val timestamp: String = LocalDateTime.now().toString()
 ) {
+    @Ignore var fileSize = 0L
 
     fun fileExists(context: Context): Boolean {
         if (path == null) {
             return false
         }
         return FileUtils.exists(context, path)
-    }
-
-    override fun toString(): String {
-        return "DownloadMediaModel(id='$id', filename='$path', title='$name', size='$size', status=$status, url='$uri', originalUrl='$originalUrl', thumbnail='$thumbnail',  timestamp='$timestamp')"
     }
 }
