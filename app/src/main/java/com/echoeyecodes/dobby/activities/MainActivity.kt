@@ -149,7 +149,7 @@ class MainActivity : AppCompatActivity(), EmptyAdapterCallback, FileItemAdapterC
     private fun scrollToTop() {
         lifecycleScope.launchWhenResumed {
             withContext(Dispatchers.IO) {
-                delay(100)
+                delay(200)
                 withContext(Dispatchers.Main) {
                     recyclerView.smoothScrollToPosition(0)
                 }

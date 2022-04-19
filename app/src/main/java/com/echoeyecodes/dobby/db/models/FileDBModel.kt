@@ -26,12 +26,7 @@ data class FileDBModel(
     val path: String?,
     val timestamp: String = LocalDateTime.now().toString()
 ) {
-    @Ignore var fileSize = 0L
-
-    fun fileExists(context: Context): Boolean {
-        if (path == null) {
-            return false
-        }
-        return FileUtils.exists(context, path)
-    }
+    @Ignore
+    var fileSize = 0L
+    @Ignore var fileExists = false
 }

@@ -6,6 +6,7 @@ import androidx.lifecycle.*
 import com.echoeyecodes.dobby.repository.FileRepository
 import com.echoeyecodes.dobby.utils.DownloadAction
 import com.echoeyecodes.dobby.utils.DownloadStatus
+import com.echoeyecodes.dobby.utils.FileUtils
 
 class DownloadActionViewModelProvider(val id: String, val context: Context) :
     ViewModelProvider.Factory {
@@ -27,32 +28,39 @@ class DownloadActionBottomSheetViewModel(val id: String, application: Applicatio
     private val fileRepository = FileRepository(application)
 
     init {
-        data = fileRepository.getFileLiveData(id).map {
-            if (it != null) {
-                when (it.status) {
-                    DownloadStatus.WAITING, DownloadStatus.DOWNLOADING -> listOf(
-                        DownloadAction.CANCEL,
-                        DownloadAction.DELETE
-                    )
-                    DownloadStatus.COMPLETE -> {
-                        if (it.fileExists(application)) {
-                            listOf(
-                                DownloadAction.OPEN,
-                                DownloadAction.COPY,
-                                DownloadAction.DELETE,
-                                DownloadAction.SHARE
-                            )
-                        } else {
-                            listOf(DownloadAction.RETRY, DownloadAction.COPY, DownloadAction.DELETE)
+        data = Transformations.switchMap(fileRepository.getFileLiveData(id)) {
+            liveData<List<DownloadAction>> {
+                if (it != null) {
+                    val options = when (it.status) {
+                        DownloadStatus.WAITING, DownloadStatus.DOWNLOADING -> listOf(
+                            DownloadAction.CANCEL,
+                            DownloadAction.DELETE
+                        )
+                        DownloadStatus.COMPLETE -> {
+                            if (FileUtils.exists(application, it.path ?: "")) {
+                                listOf(
+                                    DownloadAction.OPEN,
+                                    DownloadAction.COPY,
+                                    DownloadAction.DELETE,
+                                    DownloadAction.SHARE
+                                )
+                            } else {
+                                listOf(
+                                    DownloadAction.RETRY,
+                                    DownloadAction.COPY,
+                                    DownloadAction.DELETE
+                                )
+                            }
                         }
+                        DownloadStatus.FAILED, DownloadStatus.CANCELLED -> listOf(
+                            DownloadAction.RETRY,
+                            DownloadAction.DELETE
+                        )
                     }
-                    DownloadStatus.FAILED, DownloadStatus.CANCELLED -> listOf(
-                        DownloadAction.RETRY,
-                        DownloadAction.DELETE
-                    )
+                    emit(options)
+                } else {
+                    emit(ArrayList())
                 }
-            } else {
-                ArrayList()
             }
         }
     }
@@ -69,11 +77,11 @@ class DownloadActionBottomSheetViewModel(val id: String, application: Applicatio
         fileRepository.cancelDownload(id)
     }
 
-    suspend fun getDownloadFilePath() : String?{
+    suspend fun getDownloadFilePath(): String? {
         return fileRepository.getFile(id)?.path
     }
 
-    suspend fun getDownloadFileLink() : String?{
+    suspend fun getDownloadFileLink(): String? {
         return fileRepository.getFile(id)?.uri
     }
 

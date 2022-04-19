@@ -21,7 +21,7 @@ class FileDBModelItemCallback : DiffUtil.ItemCallback<FileDBModel>() {
     }
 
     override fun areContentsTheSame(oldItem: FileDBModel, newItem: FileDBModel): Boolean {
-        return oldItem == newItem
+        return oldItem == newItem && oldItem.fileSize == newItem.fileSize && oldItem.fileExists == newItem.fileExists
     }
 }
 
