@@ -302,7 +302,7 @@ fun Int.decode(): DownloadStatus {
 }
 
 fun FileDBModel.getPath(context: Context): String {
-    return if (fileExists(context) && status == DownloadStatus.COMPLETE) {
+    return if (this.fileExists && status == DownloadStatus.COMPLETE) {
         path!!
     } else {
         thumbnail

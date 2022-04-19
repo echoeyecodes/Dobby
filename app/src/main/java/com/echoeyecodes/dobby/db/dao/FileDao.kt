@@ -20,8 +20,8 @@ abstract class FileDao : BaseDao<FileDBModel>() {
     @Query("UPDATE files SET path = :path WHERE id = :id")
     abstract suspend fun updateFilePath(id: String, path: String?)
 
-    @Query("UPDATE files SET bytesDownloaded = :bytesDownloaded, size = :size WHERE id = :id")
-    abstract suspend fun updateFileProgress(id: String, bytesDownloaded: Long, size: Long)
+    @Query("UPDATE files SET size = :size WHERE id = :id")
+    abstract suspend fun updateFileSize(id: String, size: Long)
 
     @Query("SELECT * FROM files ORDER BY timestamp DESC")
     abstract fun getFilesLiveData(): LiveData<List<FileDBModel>>

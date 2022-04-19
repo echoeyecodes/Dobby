@@ -23,7 +23,7 @@ import com.echoeyecodes.dobby.adapters.FileItemAdapter
 import com.echoeyecodes.dobby.callbacks.adaptercallbacks.EmptyAdapterCallback
 import com.echoeyecodes.dobby.callbacks.adaptercallbacks.FileItemAdapterCallback
 import com.echoeyecodes.dobby.callbacks.dialogfragmentcallbacks.AddUrlDialogFragmentCallback
-import com.echoeyecodes.dobby.callbacks.downloadmanagercallbacks.DownloadManagerCallback
+import com.echoeyecodes.dobby.callbacks.downloadmanagercallbacks.DownloadManagerCallbackImpl
 import com.echoeyecodes.dobby.databinding.ActivityMainBinding
 import com.echoeyecodes.dobby.db.models.FileDBModel
 import com.echoeyecodes.dobby.fragments.bottomsheets.DownloadActionBottomSheetFragment
@@ -38,7 +38,7 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.withContext
 
 class MainActivity : AppCompatActivity(), EmptyAdapterCallback, FileItemAdapterCallback,
-    AddUrlDialogFragmentCallback, DownloadManagerCallback {
+    AddUrlDialogFragmentCallback {
     private val binding by lazy { ActivityMainBinding.inflate(layoutInflater) }
     private val downloadManager by lazy { DownloadManager.getInstance(this) }
     private lateinit var recyclerView: RecyclerView
@@ -49,13 +49,13 @@ class MainActivity : AppCompatActivity(), EmptyAdapterCallback, FileItemAdapterC
     private lateinit var addUrlDialogFragment: AddUrlDialogFragment
     private lateinit var fileAdapter: FileItemAdapter
 
-    private val requiredPermissions = if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.P){
+    private val requiredPermissions = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
         arrayOf(
             Manifest.permission.READ_EXTERNAL_STORAGE,
             Manifest.permission.WRITE_EXTERNAL_STORAGE,
             Manifest.permission.FOREGROUND_SERVICE
         )
-    }else{
+    } else {
         arrayOf(
             Manifest.permission.READ_EXTERNAL_STORAGE,
             Manifest.permission.WRITE_EXTERNAL_STORAGE
@@ -84,7 +84,7 @@ class MainActivity : AppCompatActivity(), EmptyAdapterCallback, FileItemAdapterC
         recyclerView = binding.recyclerView
         addBtn = binding.toolbar.btn
 
-        downloadManager.addDownloadManagerCallback(this)
+        downloadManager.addDownloadManagerCallback(downloadManagerCallback)
         progressDialogFragment =
             supportFragmentManager.findFragmentByTag(ProgressDialogFragment.TAG) as ProgressDialogFragment?
                 ?: ProgressDialogFragment.newInstance()
@@ -141,10 +141,15 @@ class MainActivity : AppCompatActivity(), EmptyAdapterCallback, FileItemAdapterC
 
     }
 
+    override fun onDestroy() {
+        downloadManager.removeDownloadManagerCallback(downloadManagerCallback)
+        super.onDestroy()
+    }
+
     private fun scrollToTop() {
         lifecycleScope.launchWhenResumed {
             withContext(Dispatchers.IO) {
-                delay(100)
+                delay(200)
                 withContext(Dispatchers.Main) {
                     recyclerView.smoothScrollToPosition(0)
                 }
@@ -272,37 +277,22 @@ class MainActivity : AppCompatActivity(), EmptyAdapterCallback, FileItemAdapterC
     }
 
     private fun updateDownloadProgress(id: String, bytesRead: Long, size: Long) {
-        val currentList = fileAdapter.currentList
-        val position = currentList.indexOfFirst { it.id == id }
-        val viewHolder = recyclerView.findViewHolderForAdapterPosition(position)
-        viewHolder?.let {
-            if (it is FileItemAdapter.FileItemAdapterViewHolder) {
-                it.updateProgress(bytesRead, size)
+        runOnUiThread {
+            val currentList = fileAdapter.currentList
+            val position = currentList.indexOfFirst { it.id == id }
+            val viewHolder = recyclerView.findViewHolderForAdapterPosition(position)
+            viewHolder?.let {
+                if (it is FileItemAdapter.FileItemAdapterViewHolder) {
+                    it.updateProgress(bytesRead, size)
+                }
             }
         }
     }
 
-    override fun onDownloadStarted(id: String) {
-
-    }
-
-    override fun onPathDetermined(id: String, path: String) {
-
-    }
-
-    override fun onDownloadProgress(id: String, bytesRead: Long, total: Long) {
-        updateDownloadProgress(id, bytesRead, total)
-    }
-
-    override fun onDownloadComplete(id: String) {
-
-    }
-
-    override fun onDownloadCancelled(id: String, exception: Exception) {
-
-    }
-
-    override fun onDownloadsFinished() {
-
+    private val downloadManagerCallback = object : DownloadManagerCallbackImpl {
+        override fun onDownloadProgress(id: String, bytesRead: Long, total: Long) {
+            super.onDownloadProgress(id, bytesRead, total)
+            updateDownloadProgress(id, bytesRead, total)
+        }
     }
 }
