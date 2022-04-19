@@ -31,6 +31,10 @@ class MainActivityViewModel(application: Application) : AndroidViewModel(applica
                     file.fileSize = fileInfo.size
                     file
                 }
+
+                /** cache previously formatted data, to prerender before recalculating
+                file metadata for new files
+                 **/
                 temp.clear()
                 temp.addAll(newData)
                 emit(newData)
