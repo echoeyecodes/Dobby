@@ -17,8 +17,8 @@ android {
         applicationId "com.echoeyecodes.dobby"
         minSdk 21
         targetSdk 32
-        versionCode 3248772
-        versionName "2.1.2"
+        versionCode 3248774
+        versionName "2.1.2b"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
