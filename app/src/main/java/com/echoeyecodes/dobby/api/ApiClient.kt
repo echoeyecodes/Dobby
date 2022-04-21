@@ -10,7 +10,7 @@ import retrofit2.converter.gson.GsonConverterFactory
 
 class ApiClient {
     private lateinit var retrofitBuilder: Retrofit.Builder
-    private val BASE_URL = "https://serene-art-334807.nw.r.appspot.com/"
+    private val BASE_URL = "https://dobbydownloader.picashot.co/"
     private lateinit var retrofit: Retrofit
 
     init {
