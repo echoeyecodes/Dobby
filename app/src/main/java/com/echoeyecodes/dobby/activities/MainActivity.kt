@@ -12,42 +12,33 @@ import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.lifecycleScope
-import androidx.recyclerview.widget.ConcatAdapter
-import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
+import androidx.viewpager2.adapter.FragmentStateAdapter
+import androidx.viewpager2.widget.ViewPager2
 import com.echoeyecodes.dobby.R
-import com.echoeyecodes.dobby.adapters.EmptyAdapter
-import com.echoeyecodes.dobby.adapters.FileItemAdapter
-import com.echoeyecodes.dobby.callbacks.adaptercallbacks.EmptyAdapterCallback
-import com.echoeyecodes.dobby.callbacks.adaptercallbacks.FileItemAdapterCallback
 import com.echoeyecodes.dobby.callbacks.dialogfragmentcallbacks.AddUrlDialogFragmentCallback
-import com.echoeyecodes.dobby.callbacks.downloadmanagercallbacks.DownloadManagerCallbackImpl
 import com.echoeyecodes.dobby.databinding.ActivityMainBinding
-import com.echoeyecodes.dobby.db.models.FileDBModel
-import com.echoeyecodes.dobby.fragments.bottomsheets.DownloadActionBottomSheetFragment
 import com.echoeyecodes.dobby.fragments.dialogfragments.AddUrlDialogFragment
 import com.echoeyecodes.dobby.fragments.dialogfragments.ProgressDialogFragment
-import com.echoeyecodes.dobby.models.EmptyModel
+import com.echoeyecodes.dobby.fragments.tabfragments.DownloadListFragment
 import com.echoeyecodes.dobby.utils.*
 import com.echoeyecodes.dobby.viewmodel.MainActivityViewModel
 import com.google.android.material.floatingactionbutton.FloatingActionButton
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.withContext
+import com.google.android.material.tabs.TabLayout
+import com.google.android.material.tabs.TabLayoutMediator
 
-class MainActivity : AppCompatActivity(), EmptyAdapterCallback, FileItemAdapterCallback,
+class MainActivity : AppCompatActivity(),
     AddUrlDialogFragmentCallback {
     private val binding by lazy { ActivityMainBinding.inflate(layoutInflater) }
-    private val downloadManager by lazy { DownloadManager.getInstance(this) }
-    private lateinit var recyclerView: RecyclerView
     private lateinit var fab: FloatingActionButton
     private lateinit var addBtn: View
     private lateinit var progressDialogFragment: ProgressDialogFragment
     private val viewModel by lazy { ViewModelProvider(this)[MainActivityViewModel::class.java] }
     private lateinit var addUrlDialogFragment: AddUrlDialogFragment
-    private lateinit var fileAdapter: FileItemAdapter
+    private lateinit var tabLayout: TabLayout
+    private lateinit var viewPager: ViewPager2
 
     private val requiredPermissions = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
         arrayOf(
@@ -63,28 +54,20 @@ class MainActivity : AppCompatActivity(), EmptyAdapterCallback, FileItemAdapterC
     }
 
     companion object {
-        const val PERMISSIONS_REQUEST_CODE = 1
+        const val ACTIVITY_START_PERMISSIONS_REQUEST_CODE = 1
+        const val EVENT_CLICK_PERMISSIONS_REQUEST_CODE = 2
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        createNotificationChannel()
-
-        if (checkSelfPermission(requiredPermissions)) {
-            initActivity()
-        } else {
-            requestPermissions()
-        }
-    }
-
-    private fun initActivity() {
         setContentView(binding.root)
 
         fab = binding.addUrlBtn
-        recyclerView = binding.recyclerView
         addBtn = binding.toolbar.btn
+        tabLayout = binding.tabLayout
+        viewPager = binding.viewPager
+        viewPager.offscreenPageLimit = 2
 
-        downloadManager.addDownloadManagerCallback(downloadManagerCallback)
         progressDialogFragment =
             supportFragmentManager.findFragmentByTag(ProgressDialogFragment.TAG) as ProgressDialogFragment?
                 ?: ProgressDialogFragment.newInstance()
@@ -93,33 +76,29 @@ class MainActivity : AppCompatActivity(), EmptyAdapterCallback, FileItemAdapterC
             supportFragmentManager.findFragmentByTag(AddUrlDialogFragment.TAG) as AddUrlDialogFragment?
                 ?: AddUrlDialogFragment.newInstance()
 
-        val itemDecoration = CustomItemDecoration(0, 0)
-        val layoutManager = LinearLayoutManager(this)
-        fileAdapter = FileItemAdapter(this)
-        val emptyAdapter = EmptyAdapter(this)
-
-        val emptyModel = EmptyModel(
-            R.drawable.ic_empty,
-            "Dedicated space for active and pending downloads",
-            "Add File"
-        )
-        val adapter = ConcatAdapter(emptyAdapter, fileAdapter)
-
-        recyclerView.layoutManager = layoutManager
-        recyclerView.addItemDecoration(itemDecoration)
-        recyclerView.adapter = adapter
-
         addBtn.setOnClickListener { openInputUrlDialog() }
         fab.setOnClickListener { openInputUrlDialog() }
 
-        viewModel.getFilesLiveData().observe(this) {
-            if (it.isEmpty()) {
-                emptyAdapter.submitList(listOf(emptyModel))
+        val adapter = DownloadListPagerFragment(this)
+        viewPager.adapter = adapter
+        TabLayoutMediator(tabLayout, viewPager) { tab, position ->
+            if (position == 0) {
+                tab.text = "ACTIVE"
             } else {
-                emptyAdapter.submitList(ArrayList())
+                tab.text = "COMPLETE"
             }
-            fileAdapter.submitList(it)
+        }.attach()
+
+        createNotificationChannel()
+
+        if (!checkSelfPermission(requiredPermissions)) {
+            initActivity()
+        } else {
+            requestPermissions(ACTIVITY_START_PERMISSIONS_REQUEST_CODE)
         }
+    }
+
+    private fun initActivity() {
         startBackgroundService()
 
         handleShareToDownloadIntent(intent)
@@ -132,33 +111,22 @@ class MainActivity : AppCompatActivity(), EmptyAdapterCallback, FileItemAdapterC
             }
 
             if (it == NetworkState.COMPLETE) {
-                scrollToTop()
+                viewPager.currentItem = 0
+                AndroidUtilities.showToastMessage(this, "Added successfully to downloads")
             }
             if (it == NetworkState.ERROR) {
-                AndroidUtilities.showSnackBar(recyclerView, "Failed to fetch data")
+                AndroidUtilities.showSnackBar(fab, "Failed to fetch data")
             }
         }
 
     }
 
-    override fun onDestroy() {
-        downloadManager.removeDownloadManagerCallback(downloadManagerCallback)
-        super.onDestroy()
-    }
-
-    private fun scrollToTop() {
-        lifecycleScope.launchWhenResumed {
-            withContext(Dispatchers.IO) {
-                delay(200)
-                withContext(Dispatchers.Main) {
-                    recyclerView.smoothScrollToPosition(0)
-                }
-            }
+    fun openInputUrlDialog() {
+        if (checkSelfPermission(requiredPermissions)) {
+            AndroidUtilities.showFragment(supportFragmentManager, addUrlDialogFragment)
+        } else {
+            requestPermissions(EVENT_CLICK_PERMISSIONS_REQUEST_CODE)
         }
-    }
-
-    private fun openInputUrlDialog() {
-        AndroidUtilities.showFragment(supportFragmentManager, addUrlDialogFragment)
     }
 
     override fun onNewIntent(intent: Intent?) {
@@ -179,11 +147,11 @@ class MainActivity : AppCompatActivity(), EmptyAdapterCallback, FileItemAdapterC
         ServiceUtil.startDownloadService(this)
     }
 
-    private fun requestPermissions() {
+    private fun requestPermissions(requestCode: Int) {
         ActivityCompat.requestPermissions(
             this,
             requiredPermissions,
-            PERMISSIONS_REQUEST_CODE
+            requestCode
         )
     }
 
@@ -191,7 +159,7 @@ class MainActivity : AppCompatActivity(), EmptyAdapterCallback, FileItemAdapterC
         if (checkSelfPermission(requiredPermissions)) {
             startService()
         } else {
-            requestPermissions()
+            requestPermissions(ACTIVITY_START_PERMISSIONS_REQUEST_CODE)
         }
     }
 
@@ -224,33 +192,16 @@ class MainActivity : AppCompatActivity(), EmptyAdapterCallback, FileItemAdapterC
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
         val granted = grantResults.all { it == PackageManager.PERMISSION_GRANTED }
         if (granted) {
-            initActivity()
+            if (requestCode == EVENT_CLICK_PERMISSIONS_REQUEST_CODE) {
+                openInputUrlDialog()
+            } else {
+                initActivity()
+            }
         } else {
             AndroidUtilities.showToastMessage(
                 this,
                 "You need to accept permissions to download the files"
             )
-            finish()
-        }
-    }
-
-    override fun onMorePressed(id: String) {
-        val actionBottomSheetFragment = DownloadActionBottomSheetFragment.newInstance(id)
-        if (!actionBottomSheetFragment.isVisible) {
-            actionBottomSheetFragment.show(
-                supportFragmentManager,
-                DownloadActionBottomSheetFragment.TAG
-            )
-        }
-    }
-
-    override fun onItemPressed(model: FileDBModel) {
-        if (model.status != DownloadStatus.COMPLETE) {
-            AndroidUtilities.showSnackBar(recyclerView, "Download not complete")
-        } else {
-            model.path?.let {
-                AndroidUtilities.openFile(this, it)
-            }
         }
     }
 
@@ -272,27 +223,29 @@ class MainActivity : AppCompatActivity(), EmptyAdapterCallback, FileItemAdapterC
         }
     }
 
-    override fun onButtonPressed() {
-        openInputUrlDialog()
-    }
+    inner class DownloadListPagerFragment(fragmentActivity: FragmentActivity) :
+        FragmentStateAdapter(fragmentActivity) {
 
-    private fun updateDownloadProgress(id: String, bytesRead: Long, size: Long) {
-        runOnUiThread {
-            val currentList = fileAdapter.currentList
-            val position = currentList.indexOfFirst { it.id == id }
-            val viewHolder = recyclerView.findViewHolderForAdapterPosition(position)
-            viewHolder?.let {
-                if (it is FileItemAdapter.FileItemAdapterViewHolder) {
-                    it.updateProgress(bytesRead, size)
-                }
+        override fun getItemCount(): Int {
+            return 2
+        }
+
+        override fun createFragment(position: Int): Fragment {
+            val type = if (position == 0) {
+                DownloadListPageType.ACTIVE
+            } else {
+                DownloadListPageType.COMPLETED
             }
+            return DownloadListFragment.getInstance(type)
         }
+
     }
 
-    private val downloadManagerCallback = object : DownloadManagerCallbackImpl {
-        override fun onDownloadProgress(id: String, bytesRead: Long, total: Long) {
-            super.onDownloadProgress(id, bytesRead, total)
-            updateDownloadProgress(id, bytesRead, total)
+    override fun onBackPressed() {
+        if (viewPager.currentItem != 0) {
+            viewPager.currentItem = 0
+            return
         }
+        super.onBackPressed()
     }
 }

@@ -232,4 +232,11 @@
         <item name="android:textColor">@color/black</item>
     </style>
 
+    <style name="TabLayoutStyle" parent="Widget.MaterialComponents.TabLayout">
+        <item name="tabIndicatorFullWidth">false</item>
+        <item name="tabIndicator">@drawable/drawable_tab_indicator_round_corner</item>
+        <item name="tabBackground">@android:color/transparent</item>
+        <item name="tabTextAppearance">@style/Regular</item>
+    </style>
+
 </resources>

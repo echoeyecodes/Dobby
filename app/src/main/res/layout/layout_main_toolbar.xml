@@ -11,7 +11,7 @@
         android:layout_height="wrap_content"
         android:background="?attr/selectableItemBackgroundBorderless"
         android:padding="10dp"
-        android:src="@drawable/ic_instagram" />
+        android:src="@drawable/ic_app_logo" />
 
     <TextView
         style="@style/SemiBold"

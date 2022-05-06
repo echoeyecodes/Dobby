@@ -1,6 +1,6 @@
 package com.echoeyecodes.dobby.utils
 
-enum class DownloadStatus{
+enum class DownloadStatus {
     WAITING,
     DOWNLOADING,
     COMPLETE,
@@ -8,7 +8,7 @@ enum class DownloadStatus{
     CANCELLED
 }
 
-enum class DownloadAction{
+enum class DownloadAction {
     COPY,
     CANCEL,
     DELETE,
@@ -18,9 +18,14 @@ enum class DownloadAction{
 }
 
 
-enum class NetworkState{
+enum class NetworkState {
     LOADING,
     COMPLETE,
     ERROR,
     NONE
+}
+
+enum class DownloadListPageType {
+    ACTIVE,
+    COMPLETED
 }

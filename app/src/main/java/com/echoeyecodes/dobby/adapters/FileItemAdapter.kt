@@ -18,6 +18,10 @@ import kotlin.math.min
 class FileItemAdapter(private val callback: FileItemAdapterCallback) :
     ListAdapter<FileDBModel, FileItemAdapter.FileItemAdapterViewHolder>(FileDBModelItemCallback()) {
 
+    init {
+        stateRestorationPolicy = StateRestorationPolicy.PREVENT_WHEN_EMPTY
+    }
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): FileItemAdapterViewHolder {
         val view =
             LayoutInflater.from(parent.context).inflate(R.layout.layout_file_item, parent, false)

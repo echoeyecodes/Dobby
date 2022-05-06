@@ -131,7 +131,6 @@
     </style>
 
 
-
     <style name="MovableIndicatorStyle">
         <item name="android:backgroundTint">@color/white</item>
     </style>
@@ -147,6 +146,7 @@
         <item name="hintTextAppearance">@style/Regular</item>
         <item name="android:textAppearance">@style/Regular</item>
     </style>
+
     <style name="AlertDialogStyle" parent="">
         <item name="android:background">@drawable/drawable_alert_dialog_inset_dark</item>
         <item name="android:insetLeft">20dp</item>
@@ -236,7 +236,7 @@
         <item name="cardBackgroundColor">@color/shot_overlay</item>
     </style>
 
-    <style name="SplashScreenTheme" parent = "Theme.MaterialComponents.DayNight.NoActionBar">
+    <style name="SplashScreenTheme" parent="Theme.MaterialComponents.DayNight.NoActionBar">
         <item name="android:windowBackground">@drawable/drawable_splash</item>
         <item name="android:navigationBarColor">@android:color/transparent</item>
         <item name="android:statusBarColor">@android:color/transparent</item>
@@ -254,6 +254,13 @@
 
     <style name="TextInputStyle" parent="ThemeOverlay.Material3.TextInputEditText">
         <item name="android:textColor">@color/white</item>
+    </style>
+
+    <style name="TabLayoutStyle" parent="Widget.MaterialComponents.TabLayout">
+        <item name="tabIndicatorFullWidth">false</item>
+        <item name="tabIndicator">@drawable/drawable_tab_indicator_round_corner</item>
+        <item name="android:background">@android:color/transparent</item>
+        <item name="tabTextAppearance">@style/Regular</item>
     </style>
 
 </resources>
